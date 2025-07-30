@@ -32,8 +32,24 @@ export function AudioPlayer({ songs, currentSongIndex, onSongChange, className =
     const audio = audioRef.current
     if (!audio || !currentSong?.audioUrl) return
 
-    audio.src = currentSong.audioUrl
-    audio.load()
+    // Check if the blob URL is still valid
+    const checkBlobUrl = async () => {
+      try {
+        const response = await fetch(currentSong.audioUrl, { method: 'HEAD' })
+        if (response.ok) {
+          audio.src = currentSong.audioUrl
+          audio.load()
+        } else {
+          console.warn('Audio file no longer available:', currentSong.title)
+          setIsPlaying(false)
+        }
+      } catch (error) {
+        console.warn('Audio file not accessible:', currentSong.title, error)
+        setIsPlaying(false)
+      }
+    }
+
+    checkBlobUrl()
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration)
@@ -124,7 +140,11 @@ export function AudioPlayer({ songs, currentSongIndex, onSongChange, className =
   if (!currentSong?.audioUrl) {
     return (
       <div className={`glass-card p-6 rounded-2xl ${className}`}>
-        <p className="text-white/60 text-center">No audio available for this playlist</p>
+        <div className="text-center space-y-2">
+          <p className="text-white/60">🎵 Audio Preview Not Available</p>
+          <p className="text-white/40 text-sm">Audio files are stored locally and become unavailable after page refresh.</p>
+          <p className="text-white/40 text-sm">Full IPFS integration coming soon!</p>
+        </div>
       </div>
     )
   }
