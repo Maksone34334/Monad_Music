@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Playlist – Pods Music</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+  <script defer src="js/create.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Pods Music</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="create.html">Create Playlist</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>Mint your Playlist</h2>
+      <p>
+        Select exactly 12 songs to include in your playlist.  Each song must
+        include a title and an audio file.  When you mint, the playlist will be
+        represented by a single NFT.  Make sure you are connected to a Web3
+        wallet such as MetaMask.
+      </p>
+      <form id="playlistForm">
+        <div id="songFields"></div>
+        <button type="submit" class="button">Mint Playlist NFT</button>
+      </form>
+      <div id="status"></div>
+    </section>
+  </main>
+</body>
+</html>
