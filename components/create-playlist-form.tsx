@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { playlistStore } from "@/lib/playlist-store"
 import { useRouter } from "next/navigation"
 import { useWeb3 } from "@/hooks/use-web3"
+import { uploadToIPFS, getIPFSUrl, isIPFSConfigured, mockIPFSUpload } from "@/lib/ipfs"
 
 interface Song {
   title: string
@@ -128,12 +129,35 @@ export function CreatePlaylistForm() {
     try {
       setStatus({ type: "info", message: "Uploading audio files to IPFS storage..." })
       
-      // In a real app, upload files to IPFS here
-      // For demo, we'll use filenames as IPFS URIs
-      const ipfsSongs = songs.map(song => ({
-        title: song.title,
-        ipfsURI: `ipfs://${song.file?.name || 'placeholder'}`
-      }))
+      // Upload all audio files to IPFS
+      const ipfsSongs = await Promise.all(
+        songs.map(async (song) => {
+          if (!song.file) {
+            return {
+              title: song.title,
+              ipfsURI: 'ipfs://placeholder'
+            }
+          }
+
+          try {
+            // Use real IPFS if configured, otherwise mock
+            const ipfsURI = isIPFSConfigured() 
+              ? await uploadToIPFS(song.file)
+              : await mockIPFSUpload(song.file)
+            
+            return {
+              title: song.title,
+              ipfsURI: ipfsURI
+            }
+          } catch (error) {
+            console.error(`Failed to upload ${song.title}:`, error)
+            return {
+              title: song.title,
+              ipfsURI: `ipfs://failed-${song.file.name}`
+            }
+          }
+        })
+      )
 
       setStatus({ type: "info", message: "Minting your playlist NFT on Monad testnet (0.12 MON fee)..." })
       
@@ -175,11 +199,20 @@ export function CreatePlaylistForm() {
 
       const rarities = ["Common", "Rare", "Epic", "Legendary", "Mythic"]
 
+      // Save playlist with IPFS URIs for audio playback
+      const songsWithIPFS = songs.map((song, index) => ({
+        ...song,
+        ipfsURI: ipfsSongs[index]?.ipfsURI,
+        audioUrl: ipfsSongs[index]?.ipfsURI?.startsWith('mock-ipfs://') 
+          ? URL.createObjectURL(song.file!) // Keep blob for mock
+          : getIPFSUrl(ipfsSongs[index]?.ipfsURI || '') // Use IPFS gateway
+      }))
+
       const playlistId = playlistStore.addPlaylist({
         title: playlistTitle,
         description: playlistDescription,
         creator: creatorName,
-        songs: songs,
+        songs: songsWithIPFS,
         gradient: gradients[Math.floor(Math.random() * gradients.length)],
         rarity: rarities[Math.floor(Math.random() * rarities.length)],
         txHash: txHash

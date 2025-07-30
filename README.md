@@ -50,7 +50,15 @@ A revolutionary Web3 music platform built on **Monad Testnet** that allows users
    pnpm dev
    ```
 
-4. **Open in browser**
+4. **Configure IPFS (Optional for audio upload)**
+   ```bash
+   # Get free API keys from https://pinata.cloud
+   # Add to .env.local:
+   NEXT_PUBLIC_PINATA_API_KEY=your_api_key
+   NEXT_PUBLIC_PINATA_SECRET_KEY=your_secret_key
+   ```
+
+5. **Open in browser**
    ```
    http://localhost:3000
    ```

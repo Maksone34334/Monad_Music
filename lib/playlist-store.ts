@@ -5,6 +5,7 @@ interface Song {
   file: File | null
   id: string
   audioUrl?: string
+  ipfsURI?: string
 }
 
 interface Playlist {
