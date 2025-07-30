@@ -77,7 +77,17 @@ export function useWeb3(): UseWeb3Return {
   }
 
   const connectWallet = async () => {
+    console.log('🔗 Attempting wallet connection...')
+    console.log('window.ethereum exists:', !!window.ethereum)
+    
+    if (typeof window === 'undefined') {
+      console.log('❌ Not in browser environment')
+      setError('Not in browser environment')
+      return
+    }
+
     if (typeof window.ethereum === 'undefined') {
+      console.log('❌ No Web3 wallet detected')
       setError('No Web3 wallet detected. Please install MetaMask.')
       setIsConnecting(false)
       return
@@ -85,16 +95,22 @@ export function useWeb3(): UseWeb3Return {
 
     // Prevent multiple simultaneous connection attempts
     if (isConnecting) {
+      console.log('⏳ Already connecting...')
       return
     }
 
+    console.log('✅ Starting connection process')
     setIsConnecting(true)
     setError(null)
 
     try {
       // Check if already connected first
+      console.log('🔍 Checking existing connections...')
       const existingAccounts = await window.ethereum.request({ method: 'eth_accounts' })
+      console.log('Existing accounts:', existingAccounts)
+      
       if (existingAccounts.length > 0) {
+        console.log('✅ Already connected to:', existingAccounts[0])
         setAccount(existingAccounts[0])
         setIsConnected(true)
         setIsConnecting(false)
@@ -102,30 +118,40 @@ export function useWeb3(): UseWeb3Return {
       }
 
       // Request account access
+      console.log('📝 Requesting account access...')
       const accounts = await window.ethereum.request({ 
         method: 'eth_requestAccounts',
         params: []
       })
       
+      console.log('Received accounts:', accounts)
+      
       if (accounts && accounts.length > 0) {
+        console.log('✅ Connected to:', accounts[0])
         setAccount(accounts[0])
         setIsConnected(true)
         
         // Add Monad testnet if not already added
+        console.log('🌐 Adding Monad network...')
         await addMonadNetwork()
+        console.log('✅ Network setup complete')
       } else {
+        console.log('❌ No accounts returned')
         setError('No accounts returned from wallet')
       }
     } catch (err: any) {
-      console.error('Wallet connection error:', err)
+      console.error('❌ Wallet connection error:', err)
       if (err.code === 4001) {
         setError('User rejected the connection request')
       } else if (err.code === -32002) {
         setError('Already processing connect. Please check MetaMask.')
+      } else if (err.code === -32603) {
+        setError('Internal error. Please refresh and try again.')
       } else {
         setError(err.message || 'Failed to connect wallet')
       }
     } finally {
+      console.log('🏁 Connection attempt finished')
       setIsConnecting(false)
     }
   }

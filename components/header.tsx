@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useWeb3 } from "@/hooks/use-web3"
 
 export function Header() {
-  const { isConnected, account, connectWallet, isConnecting } = useWeb3()
+  const { isConnected, account, connectWallet, isConnecting, error } = useWeb3()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -63,9 +63,13 @@ export function Header() {
                 onClick={connectWallet}
                 disabled={isConnecting}
                 className="btn-futuristic text-white font-medium px-6 py-2 rounded-full hover:scale-105 transition-all duration-300"
+                title={error || ''}
               >
                 <Zap className="w-4 h-4 mr-2" />
-                {isConnecting ? 'Connecting...' : isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 'Connect Wallet'}
+                {isConnecting ? 'Connecting...' : 
+                 error ? 'Connection Error' :
+                 isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 
+                 'Connect Wallet'}
               </Button>
             </nav>
 
@@ -100,9 +104,13 @@ export function Header() {
                   onClick={connectWallet}
                   disabled={isConnecting}
                   className="btn-futuristic text-white font-medium py-3 rounded-full"
+                  title={error || ''}
                 >
                   <Zap className="w-4 h-4 mr-2" />
-                  {isConnecting ? 'Connecting...' : isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 'Connect Wallet'}
+                  {isConnecting ? 'Connecting...' : 
+                   error ? 'Connection Error' :
+                   isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 
+                   'Connect Wallet'}
                 </Button>
               </nav>
             </div>
