@@ -1,5 +1,18 @@
 "use client"
 
+/*
+ * This file contains a modified version of the original playlist-store
+ * from the Monad_Music project. The key change is in the `addPlaylist`
+ * method: the audio URL for each song is no longer blindly replaced
+ * with a fresh blob URL when a File is present. Instead, it preserves
+ * any existing `audioUrl` value (for example, an IPFS gateway URL
+ * produced during the upload process) and falls back to creating a
+ * blob URL only if no `audioUrl` is defined. This ensures that
+ * playlists minted with songs stored on IPFS continue to have
+ * playable audio after a page refresh, since the File objects cannot
+ * be serialised into localStorage.
+ */
+
 interface Song {
   title: string
   file: File | null
@@ -77,6 +90,12 @@ class PlaylistStore {
     }
   }
 
+  /**
+   * Add a new playlist to the store. When converting songs for
+   * persistence, preserve any existing audioUrl rather than always
+   * generating a new blob URL from the File. This change ensures
+   * that IPFS-hosted audio remains playable after page reloads.
+   */
   addPlaylist(playlist: Omit<Playlist, "id" | "createdAt" | "collects">) {
     const newPlaylist: Playlist = {
       ...playlist,
@@ -85,11 +104,14 @@ class PlaylistStore {
       collects: 0,
     }
 
-    // Convert files to URLs for playback
-    newPlaylist.songs = newPlaylist.songs.map((song) => ({
-      ...song,
-      audioUrl: song.file ? URL.createObjectURL(song.file) : undefined,
-    }))
+    newPlaylist.songs = newPlaylist.songs.map((song) => {
+      const existingUrl = (song as any).audioUrl as string | undefined
+      const fileObj = (song as any).file as File | null | undefined
+      return {
+        ...song,
+        audioUrl: existingUrl ?? (fileObj ? URL.createObjectURL(fileObj) : undefined),
+      }
+    })
 
     this.playlists.unshift(newPlaylist)
     this.saveToStorage()
