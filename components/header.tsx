@@ -4,8 +4,10 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X, Music, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useWeb3 } from "@/hooks/use-web3"
 
 export function Header() {
+  const { isConnected, account, connectWallet, isConnecting } = useWeb3()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -57,9 +59,13 @@ export function Header() {
                 <span className="text-white/80 hover:text-white transition-colors font-medium">Create Playlist</span>
                 <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 group-hover:w-full transition-all duration-300"></div>
               </Link>
-              <Button className="btn-futuristic text-white font-medium px-6 py-2 rounded-full hover:scale-105 transition-all duration-300">
+              <Button 
+                onClick={connectWallet}
+                disabled={isConnecting}
+                className="btn-futuristic text-white font-medium px-6 py-2 rounded-full hover:scale-105 transition-all duration-300"
+              >
                 <Zap className="w-4 h-4 mr-2" />
-                Connect Wallet
+                {isConnecting ? 'Connecting...' : isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 'Connect Wallet'}
               </Button>
             </nav>
 
@@ -90,9 +96,13 @@ export function Header() {
                 >
                   Create Playlist
                 </Link>
-                <Button className="btn-futuristic text-white font-medium py-3 rounded-full">
+                <Button 
+                  onClick={connectWallet}
+                  disabled={isConnecting}
+                  className="btn-futuristic text-white font-medium py-3 rounded-full"
+                >
                   <Zap className="w-4 h-4 mr-2" />
-                  Connect Wallet
+                  {isConnecting ? 'Connecting...' : isConnected ? `${account?.slice(0, 6)}...${account?.slice(-4)}` : 'Connect Wallet'}
                 </Button>
               </nav>
             </div>
