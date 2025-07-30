@@ -201,12 +201,15 @@ export function CreatePlaylistForm() {
 
       // Save playlist with IPFS URIs for audio playback
       const songsWithIPFS = songs.map((song, index) => ({
-        ...song,
-        ipfsURI: ipfsSongs[index]?.ipfsURI,
-        audioUrl: ipfsSongs[index]?.ipfsURI?.startsWith('mock-ipfs://') 
-          ? URL.createObjectURL(song.file!) // Keep blob for mock
-          : getIPFSUrl(ipfsSongs[index]?.ipfsURI || '') // Use IPFS gateway
-      }))
+  ...song,
+  ipfsURI: ipfsSongs[index]?.ipfsURI,
+  audioUrl: ipfsSongs[index]?.ipfsURI?.startsWith('mock-ipfs://')
+    ? (song.file ? URL.createObjectURL(song.file) : undefined)
+    : ipfsSongs[index]?.ipfsURI
+      ? getIPFSUrl(ipfsSongs[index].ipfsURI)
+      : undefined
+}))
+
 
       const playlistId = playlistStore.addPlaylist({
         title: playlistTitle,
