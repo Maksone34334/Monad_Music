@@ -3,6 +3,7 @@
 
 const PINATA_API_KEY = process.env.NEXT_PUBLIC_PINATA_API_KEY || '';
 const PINATA_SECRET_KEY = process.env.NEXT_PUBLIC_PINATA_SECRET_KEY || '';
+const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || '';
 
 interface PinataResponse {
   IpfsHash: string;
@@ -32,12 +33,17 @@ export async function uploadToIPFS(file: File): Promise<string> {
     });
     formData.append('pinataOptions', options);
 
+    // Use JWT if available (preferred), otherwise API keys
+    const headers: Record<string, string> = PINATA_JWT 
+      ? { 'Authorization': `Bearer ${PINATA_JWT}` }
+      : {
+          'pinata_api_key': PINATA_API_KEY,
+          'pinata_secret_api_key': PINATA_SECRET_KEY,
+        };
+
     const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
       method: 'POST',
-      headers: {
-        'pinata_api_key': PINATA_API_KEY,
-        'pinata_secret_api_key': PINATA_SECRET_KEY,
-      },
+      headers,
       body: formData,
     });
 
@@ -86,5 +92,5 @@ export function mockIPFSUpload(file: File): Promise<string> {
  * Check if IPFS is configured
  */
 export function isIPFSConfigured(): boolean {
-  return !!(PINATA_API_KEY && PINATA_SECRET_KEY);
+  return !!(PINATA_JWT || (PINATA_API_KEY && PINATA_SECRET_KEY));
 }
