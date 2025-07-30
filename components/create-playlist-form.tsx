@@ -264,7 +264,7 @@ export function CreatePlaylistForm() {
               id="playlist-description"
               value={playlistDescription}
               onChange={(e) => setPlaylistDescription(e.target.value)}
-              placeholder="Describe your sonic journey..."
+              placeholder="Describe your Monad music journey..."
               className="glass border-white/20 text-white placeholder:text-white/50 focus:border-purple-400 focus:ring-purple-400/50 transition-all duration-300 min-h-[100px]"
             />
           </div>

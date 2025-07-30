@@ -48,7 +48,7 @@ const features = [
     icon: Globe,
     title: "Universal Network",
     description:
-      "Connect with beings across the sonic universe. Share frequencies, trade artifacts, and build the future of interdimensional music culture.",
+      "Connect with creators across the Monad ecosystem. Share playlists, trade NFTs, and build the future of decentralized music culture.",
     gradient: "from-indigo-500 via-purple-500 to-pink-500",
     glowColor: "rgba(99, 102, 241, 0.5)",
   },
@@ -74,7 +74,7 @@ export function Features() {
           </div>
 
           <h2 className="text-5xl md:text-6xl font-bold mb-8">
-            <span className="holographic">QUANTUM</span>
+            <span className="holographic">MONAD</span>
             <br />
             <span className="neon-text">CAPABILITIES</span>
           </h2>
@@ -135,7 +135,7 @@ export function Features() {
         {/* Bottom CTA */}
         <div className="text-center mt-20">
           <div className="glass-card inline-flex items-center px-8 py-4 rounded-full">
-            <span className="text-white/80 mr-4">Ready to enter the sonic metaverse?</span>
+            <span className="text-white/80 mr-4">Ready to enter the Monad ecosystem?</span>
             <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full animate-pulse"></div>
           </div>
         </div>

@@ -123,7 +123,7 @@ export default function TrendingPlaylists() {
             </div>
 
             <h2 className="text-5xl md:text-6xl font-bold mb-8">
-              <span className="holographic">SONIC</span>
+              <span className="holographic">MONAD</span>
               <br />
               <span className="neon-text">ARTIFACTS</span>
             </h2>
