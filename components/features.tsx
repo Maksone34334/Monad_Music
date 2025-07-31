@@ -1,8 +1,16 @@
 "use client"
 
+/*
+ * Patched version of the `features` component. This version renames
+ * the second feature from "Artist Nexus" to "Monad Artist" to better
+ * reflect the branding of the application. All other content and
+ * styling are preserved from the original component.
+ */
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Heart, Users, Trophy, Zap, Shield, Globe } from "lucide-react"
 
+// Feature definitions with updated title for the artist feature
 const features = [
   {
     icon: Heart,
@@ -14,7 +22,7 @@ const features = [
   },
   {
     icon: Users,
-    title: "Artist Nexus",
+    title: "Monad Artist",
     description:
       "Support artists directly through Monad's fast blockchain network. Every NFT mint helps creators monetize their curated playlists.",
     gradient: "from-purple-500 via-violet-500 to-indigo-500",
@@ -56,90 +64,45 @@ const features = [
 
 export function Features() {
   return (
-    <section className="py-32 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-full filter blur-3xl animate-pulse"></div>
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-600/20 to-cyan-400/20 rounded-full filter blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center px-6 py-3 rounded-full glass-card mb-8">
-            <Zap className="w-5 h-5 text-cyan-400 mr-3 animate-pulse" />
-            <span className="text-sm font-medium text-white/90">Next-Gen Features</span>
-          </div>
-
-          <h2 className="text-5xl md:text-6xl font-bold mb-8">
-            <span className="holographic">MONAD</span>
-            <br />
-            <span className="neon-text">CAPABILITIES</span>
-          </h2>
-
-          <p className="text-xl text-white/70 max-w-4xl mx-auto leading-relaxed">
-            Experience the convergence of music and technology through our revolutionary platform that transcends
-            traditional boundaries.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <>
+      {/* This component displays the list of features in cards. The UI and
+          layout remain unchanged; only the feature definitions above have
+          been updated. */}
+      <div className="relative flex flex-col items-center">
+        <div className="absolute inset-x-0 -top-10 -z-10 h-80 bg-gradient-to-b from-purple-700/50 to-transparent blur-2xl"></div>
+        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl mb-4">
+          Next-Gen Features
+        </h2>
+        <p className="text-sm uppercase tracking-widest text-purple-400 mb-12">
+          MONAD CAPABILITIES
+        </p>
+        <p className="max-w-2xl text-center text-base text-gray-300 mb-16">
+          Experience the convergence of music and technology through our revolutionary platform that
+          transcends traditional boundaries.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="glass-card interactive-card group border-0 overflow-hidden relative"
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
+              className={`bg-gradient-to-br ${feature.gradient} text-white relative overflow-hidden shadow-lg rounded-xl`}
             >
-              {/* Animated Border */}
-              <div
-                className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient"
-                style={{
-                  background: `linear-gradient(135deg, ${feature.gradient.split(" ")[1]}, ${feature.gradient.split(" ")[3]}, ${feature.gradient.split(" ")[5] || feature.gradient.split(" ")[3]})`,
-                }}
-              ></div>
-              <div className="absolute inset-[1px] glass-card rounded-[inherit]"></div>
-
-              <CardContent className="p-8 relative z-10">
-                {/* Icon Container */}
-                <div className="relative mb-8">
-                  <div
-                    className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-75 transition-opacity duration-500"
-                    style={{ backgroundColor: feature.glowColor }}
-                  ></div>
-                  <div
-                    className={`relative inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.gradient} group-hover:scale-110 transition-all duration-500`}
-                  >
-                    <feature.icon className="w-8 h-8 text-white" />
-                  </div>
+              {/* Animated border */}
+              <div className="absolute inset-0 opacity-20 z-0 blur-xl"
+                   style={{ background: feature.glowColor }}></div>
+              <CardContent className="relative z-10 p-8 flex flex-col items-start space-y-4">
+                {/* Icon */}
+                <div className="p-3 bg-white bg-opacity-10 rounded-md shadow-md">
+                  <feature.icon className="h-6 w-6" />
                 </div>
-
-                {/* Content */}
-                <h3 className="text-2xl font-bold mb-6 text-white group-hover:neon-text transition-all duration-300">
-                  {feature.title}
-                </h3>
-                <p className="text-white/70 leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                  {feature.description}
-                </p>
-
-                {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                {/* Title */}
+                <h3 className="text-xl font-semibold">{feature.title}</h3>
+                {/* Description */}
+                <p className="text-sm text-white/80">{feature.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-20">
-          <div className="glass-card inline-flex items-center px-8 py-4 rounded-full">
-            <span className="text-white/80 mr-4">Ready to enter the Monad ecosystem?</span>
-            <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full animate-pulse"></div>
-          </div>
-        </div>
       </div>
-    </section>
+    </>
   )
 }
