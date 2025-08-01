@@ -1,7 +1,9 @@
+"use client"
+
 import React, { useState } from 'react';
 
 /**
- * Основной компонент приложения «Monad Music».
+ * Основной компонент приложения «Monad Music».
  *
  * Этот компонент отображает список музыкальных треков, позволяет
  * воспроизводить выбранный трек через виджет SoundCloud и
@@ -55,7 +57,7 @@ export default function App() {
       {/* Заголовок */}
       <header className="w-full text-center py-8 px-4">
         <h1 className="text-3xl md:text-4xl font-bold mb-4">
-          🎵 Monad Music – Decentralized Music Platform
+          🎵 Monad Music – Decentralized Music Platform
         </h1>
       </header>
 
@@ -118,13 +120,13 @@ export default function App() {
             onClick={handleUploadClick}
             className="px-6 py-3 w-full sm:w-auto rounded-lg text-center bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
           >
-            Upload
+            📤 Загрузить трек
           </button>
           <button
             onClick={handleConnectWalletClick}
-            className="px-6 py-3 w-full sm:w-auto rounded-lg text-center bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+            className="px-6 py-3 w-full sm:w-auto rounded-lg text-center bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
           >
-            Connect Wallet
+            🔗 Подключить кошелек
           </button>
         </div>
       </main>
